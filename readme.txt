@@ -3,7 +3,7 @@ Contributors: mbsec
 Tags: link checker, broken links, dead links, dead link checker, broken link checker, broken, link, links, maintenance, plugin, seo
 Requires at least: 4.2
 Tested up to: 4.3
-Stable tag: 1.0.0-beta.3
+Stable tag: 1.0.0-beta.4
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -23,12 +23,15 @@ The Link Checker works for every plugin out of the box. The computation costs fo
 
 = Technical Features =
 * Respects your robots.txt file (also the crawl-delay directive).
+	* You could use the user-agent MB-SiteCrawler to control the crawler.
 
 = Upcoming Technical Features =
 * Support for checking the availability of embedded images, videos, CSS files and JS files.
 
-= Limitations =
-During the beta phase the service is limited to check the first 500 URLs of your website. After the beta phase, you could buy a token to check up to 50000 URLs. If you already need more URLs, please contact me by email.
+= Limitations of the Basic Version =
+The free basic version of the Link Checker allows you to check the first 500 internal and external links on your website. If you need more capacity, you could buy a token for the professional version of the Link Checker to check up to 50'000 links.
+
+[Link Checker Professional](https://www.marcobeierer.com/wordpress-plugins/link-checker-professional)
 
 = Use of an External Server =
 The Link Checker uses an external server, operated by the developer of the plugin, to crawl your website and detect broken links. This means, that there is some communication between your website and the server. The only data that is communicated to the external server by your website is the URL of your website and the fact that you are using WordPress. The server than crawlers your website (as a normal visitor does) and answers with a list of the found broken links.
@@ -39,11 +42,37 @@ The Link Checker uses an external server, operated by the developer of the plugi
 3. Access the generator with the "Link Checker" button in the sidebar and use the "Check your website" button to start the process. 
 4. The found broken links will be reported to you when the crawler has finished.
 
+== Frequently Asked Questions ==
+
+= Why could the Link Checker not access my site? =
+A reason if the Link Checker could not access your site could be that the crawler of the Link Checker is blocked by your hosting provider. I have observed this issue especially with free and really cheap hosting providers. Some block crawlers (and regular visitors) already after five fast sequential requests. The issue could be fixed by whitelisting the IP of the crawler. However, I think this option is not available for the affected hosting services. Alternatively it is possible to use the crawl-delay directive in your robots.txt to set the delay between two requests.
+
+= Which user-agent should I use in the robots.txt file? =
+The Link Checker uses a custom user-agent group named MB-SiteCrawler. This allows you a fine grained control of which pages are checked. If you do not define a group for the custom user-agent in your robots.txt file, the default set in the * group apply.
+
+= Does the Link Checker work in my local development environment? =
+No, the Link Checker needs to crawl your website and the generator has no access to you local network.
+
+= The Link Checker is very slow. What can I do? =
+In the most cases this is due to the fact that you have set a large value for the crawl-delay directive in your robots.txt file. Some hosters also add the crawl-delay directive automatically to your robots.txt file. The crawl-delay defines the time in seconds between to requests of the crawler.
+
 == Screenshots ==
 
 1. List of broken links found by the Link Checker.
 
 == Changelog ==
+
+= 1.0.0-beta.4 =
+*Release Date - 17th September, 2015*
+
+* Implemented token support for the Link Checker Professional.
+* Reset list of broken links directly and not at the first find if a second check is executed.
+* Undone change introduced in 1.0.0-beta.3: Pages blocked by the robots.txt file are not parsed from now on as in versions older than 1.0.0-beta.3. I rethought this point and think crawlers should respect the robots.txt, no matter which purpose the crawler has.
+* Support for custom user-agent group (MB-SiteCrawler) in robots.txt.
+* Better error reporting if website is not reachable.
+* Reset limit reached message before each run.
+* A status update is now requested every 2.5 seconds instead of every second.
+
 = 1.0.0-beta.3 =
 *Release Date - 21th August, 2015*
 

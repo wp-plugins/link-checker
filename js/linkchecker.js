@@ -7,8 +7,9 @@ linkCheckerApp.controller('LinkCheckerController', ['$scope', '$http', '$timeout
 	function ($scope, $http, $timeout) {
 
 		$scope.checkDisabled = false;
-		$scope.limitReached = false;
+		//$scope.limitReached = false;
 		$scope.message = "The link checker was not started yet.";
+		$scope.links = null;
 
 		$scope.check= function() {
 
@@ -16,6 +17,7 @@ linkCheckerApp.controller('LinkCheckerController', ['$scope', '$http', '$timeout
 
 				$scope.checkDisabled = true;
 				$scope.urlsCrawledCount = 0;
+				$scope.links = null;
 
 				$scope.message = "Your website is being checked. Please wait a moment.";
 		
@@ -27,13 +29,17 @@ linkCheckerApp.controller('LinkCheckerController', ['$scope', '$http', '$timeout
 							if (data.Finished) { //successfull
 
 								$scope.checkDisabled = false;
-								$scope.message = "Your website was checked successfully. Please see the result below.";
 								$scope.urlsCrawledCount = 0;
-								$scope.limitReached = data.LimitReached; // TODO does this work?
+
+								if (data.LimitReached) {
+									$scope.message = "The link limit was reached. The Link Checker has not checked your complete website. You could buy a token for the <a href=\"https://www.marcobeierer.com/wordpress-plugins/link-checker-professional\">Link Checker Professional</a> to check up to 50'000 links."
+								} else {
+									$scope.message = "Your website was checked successfully. Please see the result below.";
+								}
 							}
 							else {
 								$scope.urlsCrawledCount = data.URLsCrawledCount;
-								$timeout(poller, 1000);
+								$timeout(poller, 2500);
 							}
 
 							if (!jQuery.isEmptyObject(data.DeadLinks)) { // necessary for placeholder
@@ -42,10 +48,13 @@ linkCheckerApp.controller('LinkCheckerController', ['$scope', '$http', '$timeout
 						}).
 						error(function(data, status, headers, config) {
 
-							// TODO handle status 401 unauthorized
-
 							$scope.checkDisabled = false;
-							$scope.message = "The check of your website failed. Please try it again.";
+
+							if (status == 401) { // unauthorized
+								$scope.message = "The validation of your token failed. The token is invalid or has expired. Please try it again or contact me if the token should be valid.";
+							} else {
+								$scope.message = "The check of your website failed. Please try it again.";
+							}
 						});
 				}
 				poller();
@@ -53,3 +62,9 @@ linkCheckerApp.controller('LinkCheckerController', ['$scope', '$http', '$timeout
 		}
 	}
 ]);
+
+linkCheckerApp.filter("sanitize", ['$sce', function($sce) {
+	return function(htmlCode){
+		return $sce.trustAsHtml(htmlCode);
+	}
+}]);
