@@ -6,9 +6,16 @@ var language = jQuery('html').attr('lang');
 linkCheckerApp.controller('LinkCheckerController', ['$scope', '$http', '$timeout',
 	function ($scope, $http, $timeout) {
 
+		var resultsMessage = 'Link check not started yet.';
+
 		$scope.checkDisabled = false;
-		//$scope.limitReached = false;
+
+		$scope.urlsCrawledCount = 0;
+		$scope.checkedLinksCount = 0;
+
 		$scope.message = "The link checker was not started yet.";
+		$scope.resultsMessage = resultsMessage;
+
 		$scope.links = null;
 
 		$scope.check= function() {
@@ -16,30 +23,37 @@ linkCheckerApp.controller('LinkCheckerController', ['$scope', '$http', '$timeout
 			if ($scope.linkCheckerForm.$valid) {
 
 				$scope.checkDisabled = true;
+
 				$scope.urlsCrawledCount = 0;
+				$scope.checkedLinksCount = 0;
+
 				$scope.links = null;
 
 				$scope.message = "Your website is being checked. Please wait a moment.";
-		
+				$scope.resultsMessage = 'Please wait until the check has finished.';
+
 				var poller = function() {
 
 					$http.get('admin-ajax.php?action=link_checker_proxy').
 						success(function(data, status, headers, config) {
 
+							$scope.urlsCrawledCount = data.URLsCrawledCount;
+							$scope.checkedLinksCount = data.CheckedLinksCount;
+
 							if (data.Finished) { //successfull
 
 								$scope.checkDisabled = false;
-								$scope.urlsCrawledCount = 0;
 
 								if (data.LimitReached) {
 									$scope.message = "The link limit was reached. The Link Checker has not checked your complete website. You could buy a token for the <a href=\"https://www.marcobeierer.com/wordpress-plugins/link-checker-professional\">Link Checker Professional</a> to check up to 50'000 links."
 								} else {
 									$scope.message = "Your website was checked successfully. Please see the result below.";
 								}
+
+								$scope.resultsMessage = 'No broken links found.';
 							}
 							else {
-								$scope.urlsCrawledCount = data.URLsCrawledCount;
-								$timeout(poller, 2500);
+								$timeout(poller, 1000);
 							}
 
 							if (!jQuery.isEmptyObject(data.DeadLinks)) { // necessary for placeholder
@@ -55,6 +69,8 @@ linkCheckerApp.controller('LinkCheckerController', ['$scope', '$http', '$timeout
 							} else {
 								$scope.message = "The check of your website failed. Please try it again.";
 							}
+
+							$scope.resultsMessage = resultsMessage;
 						});
 				}
 				poller();
