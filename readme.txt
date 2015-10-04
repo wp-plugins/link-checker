@@ -3,14 +3,14 @@ Contributors: mbsec
 Tags: link checker, broken links, dead links, dead link checker, broken link checker, broken, link, links, maintenance, plugin, seo
 Requires at least: 4.2
 Tested up to: 4.3
-Stable tag: 1.0.4
+Stable tag: 1.1.0
 License: GPL v3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-An easy to use link checker for WordPress to detect broken internal and external links on your website.
+An easy to use link checker for WordPress to detect broken internal and external links and broken images on your website.
 
 == Description ==
-The [Link Checker](https://www.marcobeierer.com/wordpress-plugins/link-checker) for WordPress uses an external service to crawl your website and and find broken links on your website. 
+The [Link Checker](https://www.marcobeierer.com/wordpress-plugins/link-checker) for WordPress uses an external service to crawl your website and and find broken links and images on your website. 
 
 In contrast to search engine tools like the Google Search Console, which only show if a URL on your website is not reachable, it does not matter for the Link Checker if the links leads to an internal or external URL. The Link Checker will find all dead links. 
 
@@ -25,8 +25,11 @@ The Link Checker works for every plugin out of the box. The computation costs fo
 * Respects your robots.txt file (also the crawl-delay directive).
 	* You could use the user-agent MB-SiteCrawler to control the crawler.
 
+= Additional Technical Features of the Professional Version =
+* Check if embedded internal and external images are broken.
+
 = Upcoming Technical Features =
-* Support for checking the availability of embedded images, videos, CSS files and JS files.
+* Support for checking the availability of videos, CSS files and JS files.
 
 = Technical Requirements =
 * cURL 7.18.1 or higher.
@@ -65,6 +68,14 @@ In the most cases this is due to the fact that you have set a large value for th
 1. List of broken links found by the Link Checker.
 
 == Changelog ==
+
+= 1.1.0 =
+*Release Date - 4th October, 2015*
+
+* Added support for check of embedded image.
+* Some improvements and bug fixes in the backend service.
+* Implemented a simple template engine.
+* Implemented 15 seconds timeout for connection establishment.
 
 = 1.0.4 =
 *Release Date - 27th September, 2015*

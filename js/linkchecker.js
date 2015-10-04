@@ -17,8 +17,9 @@ linkCheckerApp.controller('LinkCheckerController', ['$scope', '$http', '$timeout
 		$scope.resultsMessage = resultsMessage;
 
 		$scope.links = null;
+		$scope.urlsWithDeadImages = null;
 
-		$scope.check= function() {
+		$scope.check = function() {
 
 			if ($scope.linkCheckerForm.$valid) {
 
@@ -28,6 +29,7 @@ linkCheckerApp.controller('LinkCheckerController', ['$scope', '$http', '$timeout
 				$scope.checkedLinksCount = 0;
 
 				$scope.links = null;
+				$scope.urlsWithDeadImages = null;
 
 				$scope.message = "Your website is being checked. Please wait a moment.";
 				$scope.resultsMessage = 'Please wait until the check has finished.';
@@ -47,7 +49,7 @@ linkCheckerApp.controller('LinkCheckerController', ['$scope', '$http', '$timeout
 								if (data.LimitReached) {
 									$scope.message = "The link limit was reached. The Link Checker has not checked your complete website. You could buy a token for the <a href=\"https://www.marcobeierer.com/wordpress-plugins/link-checker-professional\">Link Checker Professional</a> to check up to 50'000 links."
 								} else {
-									$scope.message = "Your website was checked successfully. Please see the result below.";
+									$scope.message = "Your website has been checked successfully. Please see the result below. If you additionally like to check your site for <strong>broken images</strong>, then check out the <a href=\"https://www.marcobeierer.com/wordpress-plugins/link-checker-professional\">Link Checker Professional</a>.";
 								}
 
 								$scope.resultsMessage = 'No broken links found.';
@@ -58,6 +60,10 @@ linkCheckerApp.controller('LinkCheckerController', ['$scope', '$http', '$timeout
 
 							if (!jQuery.isEmptyObject(data.DeadLinks)) { // necessary for placeholder
 								$scope.links = data.DeadLinks;
+							}
+
+							if (!jQuery.isEmptyObject(data.DeadEmbeddedImages)) { // necessary for placeholder
+								$scope.urlsWithDeadImages = data.DeadEmbeddedImages;
 							}
 						}).
 						error(function(data, status, headers, config) {
